@@ -1,9 +1,11 @@
-require 'pry'
-def is_pair? card1, card2
-	card1.to_s == card2.to_s ? true : false
-end
-def is_soft? card1, card2
-	card1.include?("A") || card2.include?("A") ? false : true
+def convert_face(card)
+ if card == "J" || card == "K" || card == "Q"
+   return "10"
+ elsif card == "A"
+     return "11"
+ else 
+     return card
+ end
 end
 
 
@@ -33,7 +35,7 @@ p = "split"
  		 "19" => { "2" =>  h,  "3" =>  h,  "4" =>  s,  "5" =>  s,  "6" =>  s,  "7" =>  s,  "8" =>  s,  "9" =>  s,  "10" =>  s,  "11" =>  s},
  		 "20" => { "2" =>  h,  "3" =>  h,  "4" =>  s,  "5" =>  s,  "6" =>  s,  "7" =>  s,  "8" =>  s,  "9" =>  s,  "10" =>  s,  "11" =>  s},
  		 "21" => { "2" =>  h,  "3" =>  h,  "4" =>  s,  "5" =>  s,  "6" =>  s,  "7" =>  s,  "8" =>  s,  "9" =>  s,  "10" =>  s,  "11" =>  s},
- 		},
+ 		}
  	soft = {
  		 "13" => { "2" =>  h,  "3" =>  h,  "4" => dh,  "5" => dh,  "6" => dh,  "7" =>  h,  "8" =>  h,  "9" =>  h,  "10" =>  h,  "11" =>  h},
  		 "14" => { "2" =>  h,  "3" =>  h,  "4" => dh,  "5" => dh,  "6" => dh,  "7" =>  h,  "8" =>  h,  "9" =>  h,  "10" =>  h,  "11" =>  h},
@@ -44,7 +46,7 @@ p = "split"
  		 "19" => { "2" =>  s,  "3" =>  s,  "4" =>  s,  "5" =>  s,  "6" => ds,  "7" =>  s,  "8" =>  s,  "9" =>  s,  "10" =>  s,  "11" =>  s},
  		 "20" => { "2" =>  s,  "3" =>  s,  "4" =>  s,  "5" =>  s,  "6" =>  s,  "7" =>  s,  "8" =>  s,  "9" =>  s,  "10" =>  s,  "11" =>  s},
  		 "21" => { "2" =>  s,  "3" =>  s,  "4" =>  s,  "5" =>  s,  "6" =>  s,  "7" =>  s,  "8" =>  s,  "9" =>  s,  "10" =>  s,  "11" =>  s},
- 		},
+ 		}
  	pair = {
  		 "2"   => { "2" =>  p,  "3" =>  p,  "4" =>  p,  "5" =>  p,  "6" =>  p,  "7" =>  p,  "8" =>  h,  "9" =>  h,  "10" =>  h,  "11" =>  h},
  		 "3"   => { "2" =>  p,  "3" =>  p,  "4" =>  p,  "5" =>  p,  "6" =>  p,  "7" =>  p,  "8" =>  p,  "9" =>  h,  "10" =>  h,  "11" =>  h},
@@ -56,28 +58,29 @@ p = "split"
  		 "9"   => { "2" =>  p,  "3" =>  p,  "4" =>  p,  "5" =>  p,  "6" =>  p,  "7" =>  s,  "8" =>  p,  "9" =>  p,  "10" =>  s,  "11" =>  s},
  		 "10" => { "2" =>  s,  "3" =>  s,  "4" =>  s,  "5" =>  s,  "6" =>  s,  "7" =>  s,  "8" =>  s,  "9" =>  s,  "10" =>  s,  "11" =>  s},
  		 "11"   => { "2" =>  p,  "3" =>  p,  "4" =>  p,  "5" =>  p,  "6" =>  p,  "7" =>  p,  "8" =>  p,  "9" =>  p,  "10" =>  p,  "11" =>  p},
- 		},
- 	face = {
- 		 "10" => {"j" => "Jack", "q" => "Queen", "k" => "King"}
- 	} 
+ 		}
 
 
 # Asks and receives first card
 puts "Please enter your first card"
 first_card = gets.chomp
+first_card = convert_face(first_card)
 # Asks and receives second card
 puts "Please enter your second card"
 second_card = gets.chomp
+second_card = convert_face(second_card)
 # Asks for dealers card
 puts "Please enter dealer's card"
 dealer_card = gets.chomp
+dealer_card = convert_face(dealer_card)
 
 # Checks to see if cards are a pair 
-if is_pair?(first_card,second_card)
-	move = pair[first_card][dealer_card]
-	puts move
-elsif is_soft?(first_card,second_card)
-	puts "its soft"
+if first_card == second_card
+	puts pair[first_card][dealer_card]
+elsif first_card == "11" || second_card == "11"
+	puts soft["#{first_card.to_i + second_card.to_i}"]["#{dealer_card}"]
+else
+	puts hard["#{first_card.to_i + second_card.to_i}"]["#{dealer_card}"]
 end
 
 
